@@ -1,0 +1,15 @@
+{
+  "name": "lecture-5-starter",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "5.3.1",
+    "prisma": "^5.3.1"
+  }
+}

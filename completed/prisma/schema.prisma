@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Song {
+  id       Int    @id @default(autoincrement()) // Alternatively can do UUID's with @default(uuid())
+  title    String
+  artistId Int
+  artist   Artist @relation("Artist's Songs", fields: [artistId], references: [id])
+  albumId  Int
+  album    Album  @relation("Album's Songs", fields: [albumId], references: [id])
+}
+
+model Artist {
+  id     Int     @id @default(autoincrement())
+  name   String
+  songs  Song[]  @relation("Artist's Songs")
+  albums Album[] @relation("Artist's Albums")
+}
+
+model Album {
+  id       Int    @id @default(autoincrement())
+  name     String
+  artistId Int
+  artist   Artist @relation("Artist's Albums", fields: [artistId], references: [id])
+  songs    Song[] @relation("Album's Songs")
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
+
+  // One to one self relation 
+  successorId Int?  @unique
+  successor   User? @relation("BlogOwnerHistory", fields: [successorId], references: [id])
+  predecessor User? @relation("BlogOwnerHistory")
+
+  // One to many self relation
+  teacherId Int?
+  teacher   User?  @relation("TeacherStudents", fields: [teacherId], references: [id])
+  students  User[] @relation("TeacherStudents")
+
+  // Many to many self relation
+  followedBy User[] @relation("UserFollows")
+  following  User[] @relation("UserFollows")
+}
